@@ -1,0 +1,195 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Modern glass UI baseline */
+:root {
+  --bg: 249 250 251;
+  --fg: 17 24 39;
+}
+.dark :root {
+  --bg: 17 24 39;
+  --fg: 249 250 251;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  background: rgb(var(--bg));
+  color: rgb(var(--fg));
+}
+
+.card {
+  @apply rounded-2xl border border-gray-200/70 bg-white/70 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-white/5;
+}
+
+.btn {
+  @apply inline-flex items-center justify-center rounded-md border px-4 py-2 text-sm font-medium transition;
+}
+
+/* Fancy utilities and animations */
+@layer utilities {
+  .hero-surface {
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-surface::before {
+    content: '';
+    position: fixed;
+    inset: -20vmax;
+    z-index: -2;
+    background:
+      radial-gradient(
+        60vmax 40vmax at 10% -10%,
+        rgba(16, 185, 129, 0.14),
+        transparent 60%
+      ),
+      radial-gradient(
+        50vmax 35vmax at 90% 0%,
+        rgba(59, 130, 246, 0.14),
+        transparent 60%
+      ),
+      radial-gradient(
+        45vmax 30vmax at 50% 110%,
+        rgba(236, 72, 153, 0.12),
+        transparent 60%
+      );
+    animation: bg-drift 36s ease-in-out infinite alternate;
+  }
+  .dark .hero-surface::before {
+    background:
+      radial-gradient(
+        60vmax 40vmax at 10% -10%,
+        rgba(16, 185, 129, 0.16),
+        transparent 60%
+      ),
+      radial-gradient(
+        50vmax 35vmax at 90% 0%,
+        rgba(59, 130, 246, 0.16),
+        transparent 60%
+      ),
+      radial-gradient(
+        45vmax 30vmax at 50% 110%,
+        rgba(236, 72, 153, 0.14),
+        transparent 60%
+      );
+  }
+
+  .hero-surface::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.55),
+        rgba(255, 255, 255, 0)
+      ),
+      linear-gradient(0deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04)),
+      linear-gradient(0deg, rgba(100, 100, 100, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(100, 100, 100, 0.04) 1px, transparent 1px);
+    background-size:
+      100% 100%,
+      100% 100%,
+      40px 40px,
+      40px 40px;
+    mix-blend-mode: normal;
+  }
+  .dark .hero-surface::after {
+    background-image:
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0)),
+      linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.03),
+        rgba(255, 255, 255, 0.03)
+      ),
+      linear-gradient(0deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  }
+
+  @keyframes bg-drift {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    100% {
+      transform: translate3d(0, -2%, 0) scale(1.02);
+    }
+  }
+
+  .animate-float {
+    animation: float 4.5s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+
+  .animate-glow {
+    animation: glow 2.4s ease-in-out infinite;
+  }
+  @keyframes glow {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+    }
+    50% {
+      box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.18);
+    }
+  }
+
+  .animate-scan {
+    animation: scan 2.2s linear infinite;
+  }
+  @keyframes scan {
+    0% {
+      transform: translateY(-60%);
+    }
+    100% {
+      transform: translateY(160%);
+    }
+  }
+
+  .spin-slow {
+    animation: spin 10s linear infinite;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .conic-border {
+    position: relative;
+  }
+  .conic-border::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    z-index: 0;
+    border-radius: 1rem; /* match rounded-2xl */
+    background: conic-gradient(
+      from 0deg,
+      rgba(16, 185, 129, 0.6),
+      rgba(59, 130, 246, 0.6),
+      rgba(236, 72, 153, 0.6),
+      rgba(16, 185, 129, 0.6)
+    );
+    filter: blur(8px);
+    opacity: 0.6;
+    animation: spin 12s linear infinite;
+  }
+  .conic-border > * {
+    position: relative;
+    z-index: 1;
+    border-radius: 1rem;
+  }
+}
