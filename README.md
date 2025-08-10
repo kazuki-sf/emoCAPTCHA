@@ -1,6 +1,8 @@
 ## emoCAPTCHA
 
-Photo-based emoji CAPTCHA built with Next.js 15, React 19, and Tailwind CSS. Users match a random emoji by making the facial expression and taking a selfie. Scoring supports two engines:
+This project is a CAPTCHA-like authentication system where the user is shown an emoji and must mimic the same facial expression in front of their camera to pass the verification.
+
+Built with Next.js 15, React 19, and Tailwind CSS. Scoring supports two engines:
 
 - On-device (MediaPipe Tasks Vision) — private and fast, no network calls
 - Cloud (OpenAI Vision) — simple and robust; requires `OPENAI_API_KEY`
@@ -11,6 +13,9 @@ Photo-based emoji CAPTCHA built with Next.js 15, React 19, and Tailwind CSS. Use
 - Tailwind CSS
 - MediaPipe Tasks Vision (on-device face blendshapes)
 - OpenAI Vision API (optional)
+
+### Built with Cursor + GPT-5
+This project was pair‑programmed in Cursor with GPT‑5 assistance.
 
 ### Project vision
 Regular CAPTCHAs are tedious. emoCAPTCHA makes verification playful by asking people to mimic emojis. Beyond fun, the goal is societal benefit: modern AI still struggles with reading human emotions, and ethically sourced examples of real facial expressions can help improve that. If users choose to contribute, their emoji-matching selfies could form a valuable dataset to train models to better understand human emotions.
