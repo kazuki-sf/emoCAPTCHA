@@ -4,6 +4,9 @@ This project is a CAPTCHA-like authentication system where the user is shown an 
 
 Built with Next.js 15, React 19, and Tailwind CSS. Scoring supports two engines:
 
+### Name
+The “emo” in `emoCAPTCHA` stands for both “emotion” and “emoji”.
+
 - On-device (MediaPipe Tasks Vision) — private and fast, no network calls
 - Cloud (OpenAI Vision) — simple and robust; requires `OPENAI_API_KEY`
 
