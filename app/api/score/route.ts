@@ -6,8 +6,52 @@ const openai = new OpenAI({
   baseURL: process.env.OPENAI_BASE_URL,
 })
 
+// Simple in-memory rate limiter (best-effort). Consider Redis for production.
+const RATE_LIMIT_WINDOW_MS = 60_000 // 1 minute
+const RATE_LIMIT_MAX = 30 // 30 requests/min per key
+const bucket = new Map<string, { count: number; resetAt: number }>()
+
+function keyFromRequest(req: NextRequest): string {
+  const xff = req.headers.get('x-forwarded-for') || ''
+  const ip = xff.split(',')[0].trim() || 'local'
+  const ua = req.headers.get('user-agent') || 'unknown'
+  return `${ip}:${ua}`
+}
+
+function checkRateLimit(req: NextRequest): { ok: boolean; retryAfter?: number } {
+  const key = keyFromRequest(req)
+  const now = Date.now()
+  const item = bucket.get(key)
+  if (!item || now > item.resetAt) {
+    bucket.set(key, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS })
+    return { ok: true }
+  }
+  if (item.count < RATE_LIMIT_MAX) {
+    item.count += 1
+    return { ok: true }
+  }
+  return { ok: false, retryAfter: Math.ceil((item.resetAt - now) / 1000) }
+}
+
 export async function POST(req: NextRequest) {
   try {
+    // Env validation when cloud scoring is invoked
+    if (!process.env.OPENAI_API_KEY) {
+      return NextResponse.json(
+        { error: 'Server misconfigured: OPENAI_API_KEY is not set' },
+        { status: 500 }
+      )
+    }
+
+    // Basic rate limiting
+    const rl = checkRateLimit(req)
+    if (!rl.ok) {
+      return NextResponse.json(
+        { error: 'Too Many Requests' },
+        { status: 429, headers: { 'Retry-After': String(rl.retryAfter ?? 60) } }
+      )
+    }
+
     const { imageDataUrl, challenge } = await req.json()
     if (!imageDataUrl || !challenge?.id || !challenge?.label) {
       return NextResponse.json({ error: 'Invalid payload' }, { status: 400 })

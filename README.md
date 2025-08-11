@@ -17,8 +17,8 @@ The “emo” in `emoCAPTCHA` stands for both “emotion” and “emoji”.
 - MediaPipe Tasks Vision (on-device face blendshapes)
 - OpenAI Vision API (optional)
 
-### Built with Cursor + GPT-5
-This project was pair‑programmed in Cursor with GPT‑5 assistance.
+### Built with Cursor/Windsurf + GPT-5
+This project was pair‑programmed in Cursor/Windsurf with GPT‑5 assistance.
 
 ### Project vision
 Regular CAPTCHAs are tedious. emoCAPTCHA makes verification playful by asking people to mimic emojis. Beyond fun, the goal is societal benefit: modern AI still struggles with reading human emotions, and ethically sourced examples of real facial expressions can help improve that. If users choose to contribute, their emoji-matching selfies could form a valuable dataset to train models to better understand human emotions.
@@ -68,14 +68,14 @@ Open `http://localhost:3000`.
 - Cloud scoring: `app/api/score/route.ts` calls the OpenAI Vision model and returns `{ matched, confidence, reasons, model }`.
 - On-device scoring: MediaPipe face blendshapes are evaluated locally against thresholds.
 
-By default, the component initializes with the cloud engine:
+By default, the component uses the cloud engine (OpenAI). If the cloud call fails, it automatically falls back to on‑device scoring. There is no visible engine toggle in the UI:
 
 ```ts
 // components/EmoCaptcha.tsx
 const [engine] = useState<'mediapipe' | 'openai'>('openai')
 ```
 
-Switch to on-device by changing `'openai'` to `'mediapipe'`.
+You can change the default engine in code by editing the initial `useState` value if desired.
 
 ---
 
@@ -104,8 +104,11 @@ Response:
 ```
 
 Notes:
-- If `OPENAI_API_KEY` is not set, the endpoint will return an error when called.
+- Env validation: if `OPENAI_API_KEY` is not set, the endpoint returns an error.
+- Rate limiting: best‑effort in‑memory limiter (30 req/min per client). Use Redis/Upstash in production.
 - Confidence is rounded to two decimals; pass threshold is ≥ 0.60.
+
+Security headers: `next.config.ts` sets CSP, Permissions‑Policy (camera allowed only for self), HSTS, and other hardened defaults.
 
 ---
 
