@@ -25,7 +25,9 @@ Regular CAPTCHAs are tedious. emoCAPTCHA makes verification playful by asking pe
 
 Ethics and privacy are central: any data contribution must be strictly opt‑in, consented, and protected with clear retention and anonymization policies. This repo ships with data collection disabled by default.
 
----
+## Demo
+
+<video src="./public/demo.mp4" controls playsinline muted width="720"></video>
 
 ## Quick start
 
