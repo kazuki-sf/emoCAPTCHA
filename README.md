@@ -27,7 +27,7 @@ Ethics and privacy are central: any data contribution must be strictly opt‑in,
 
 ## Demo
 
-<video src="./public/demo.mp4" controls playsinline muted width="720"></video>
+[![Watch the demo](https://i.ytimg.com/vi/IYQdEOPbSjE/maxresdefault.jpg)](https://www.youtube.com/watch?v=IYQdEOPbSjE)
 
 ## Quick start
 
